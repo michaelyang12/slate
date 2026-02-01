@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { folders, selectedFolderId, createFolder, updateFolder, deleteFolder, loadFolders } from '$lib/stores/folders';
+  import { folders, selectedFolderId, createFolder, updateFolder, deleteFolder } from '$lib/stores/folders';
   import { loadNotes, notes, selectedNoteId, selectedNote } from '$lib/stores/notes';
   import { mobileView } from '$lib/stores/ui';
   import type { Folder } from '$lib/types';

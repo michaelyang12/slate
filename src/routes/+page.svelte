@@ -9,7 +9,7 @@
   import NoteEditor from '$lib/components/NoteEditor.svelte';
   import SearchModal from '$lib/components/SearchModal.svelte';
 
-  let innerWidth = $state(window.innerWidth);
+  let innerWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
   let isMobile = $derived(innerWidth < 768);
 
   onMount(() => {
