@@ -90,9 +90,16 @@ body {
   overflow: hidden;
 }
 
-.app-shell > * {
+.app-shell > .panel-wrapper {
   overflow-y: auto;
   height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell > .panel-wrapper > :global(*) {
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Panel borders */
@@ -228,4 +235,43 @@ input {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 767px) {
+  .app-shell {
+    display: block;
+  }
+
+  .app-shell > .panel-wrapper {
+    display: none;
+    width: 100%;
+  }
+
+  .app-shell > .panel-wrapper.mobile-visible {
+    display: flex;
+  }
+
+  .mobile-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--accent);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+
+  .mobile-back-btn:hover {
+    color: var(--accent-hover);
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-back-btn {
+    display: none;
+  }
 }

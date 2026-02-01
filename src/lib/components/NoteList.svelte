@@ -1,6 +1,7 @@
 <script lang="ts">
   import { folders, selectedFolderId } from '$lib/stores/folders';
   import { notes, selectedNoteId, selectedNote, createNote, loadNotes } from '$lib/stores/notes';
+  import { mobileView } from '$lib/stores/ui';
   import type { Note } from '$lib/types';
 
   let currentFolderName = $derived(
@@ -33,6 +34,7 @@
   function selectNote(note: Note) {
     selectedNoteId.set(note.id);
     selectedNote.set(note);
+    mobileView.set('editor');
   }
 
   async function handleNewNote() {
@@ -45,6 +47,12 @@
 
 <div class="panel-notelist notelist">
   {#if $selectedFolderId}
+    <button class="mobile-back-btn" onclick={() => mobileView.set('folders')}>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Folders
+    </button>
     <div class="notelist-header">
       <span class="notelist-title truncate">{currentFolderName}</span>
       <button class="icon-btn" onclick={handleNewNote} title="New note">

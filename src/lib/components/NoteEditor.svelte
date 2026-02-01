@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { selectedNote, selectedNoteId, updateNote } from '$lib/stores/notes';
+  import { mobileView } from '$lib/stores/ui';
   import { Editor } from '@tiptap/core';
   import StarterKit from '@tiptap/starter-kit';
   import Placeholder from '@tiptap/extension-placeholder';
@@ -71,6 +72,12 @@
 
 <div class="panel-editor editor-panel">
   {#if $selectedNote}
+    <button class="mobile-back-btn" onclick={() => mobileView.set('notes')}>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      Notes
+    </button>
     <div class="editor-container">
       <input
         class="title-input"

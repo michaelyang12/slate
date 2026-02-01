@@ -1,6 +1,7 @@
 <script lang="ts">
   import { folders, selectedFolderId, createFolder, updateFolder, deleteFolder, loadFolders } from '$lib/stores/folders';
   import { loadNotes, notes, selectedNoteId, selectedNote } from '$lib/stores/notes';
+  import { mobileView } from '$lib/stores/ui';
   import type { Folder } from '$lib/types';
 
   let newFolderName = $state('');
@@ -37,6 +38,7 @@
     selectedNoteId.set(null);
     selectedNote.set(null);
     loadNotes(id);
+    mobileView.set('notes');
   }
 
   async function handleCreateFolder() {
