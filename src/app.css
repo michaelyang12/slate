@@ -1,4 +1,7 @@
-/* ===== Reset & Base ===== */
+/* ===== Teenage Engineering-Inspired Design System ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 *,
 *::before,
 *::after {
@@ -8,61 +11,78 @@
 }
 
 :root {
-  /* Light mode (default) */
-  --bg-primary: #fafaf9;
-  --bg-secondary: #f5f5f4;
-  --bg-tertiary: #e7e5e4;
-  --bg-hover: rgba(0, 0, 0, 0.04);
-  --bg-selected: rgba(99, 102, 241, 0.08);
+  /* TE Orange */
+  --te-orange: #FF6900;
+  --te-orange-hover: #E55E00;
+  --te-orange-subtle: rgba(255, 105, 0, 0.08);
+  --te-orange-glow: rgba(255, 105, 0, 0.15);
 
-  --text-primary: #1c1917;
-  --text-secondary: #57534e;
-  --text-tertiary: #a8a29e;
-  --text-inverse: #fafaf5;
+  /* Light mode */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F7F7F5;
+  --bg-tertiary: #EDEDEB;
+  --bg-hover: rgba(0, 0, 0, 0.04);
+  --bg-selected: rgba(255, 105, 0, 0.06);
+  --bg-elevated: #FFFFFF;
+
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --text-tertiary: #A0A0A0;
+  --text-inverse: #FFFFFF;
 
   --border-color: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --border-focus: var(--te-orange);
 
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --accent-subtle: rgba(99, 102, 241, 0.1);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 0 1px var(--te-orange), 0 0 20px rgba(255, 105, 0, 0.1);
 
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --radius-pill: 100px;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  --font-display: 'Space Grotesk', -apple-system, sans-serif;
 
-  --sidebar-width: 220px;
-  --notelist-width: 280px;
+  --sidebar-width: 240px;
+  --notelist-width: 300px;
+
+  --toolbar-bg: var(--bg-secondary);
+  --toolbar-border: var(--border-color);
+  --toolbar-btn-hover: var(--bg-tertiary);
+  --toolbar-btn-active: var(--te-orange);
 
   color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary: #0c0a09;
-    --bg-secondary: #1c1917;
-    --bg-tertiary: #292524;
+    --bg-primary: #0A0A0A;
+    --bg-secondary: #141414;
+    --bg-tertiary: #1E1E1E;
     --bg-hover: rgba(255, 255, 255, 0.05);
-    --bg-selected: rgba(99, 102, 241, 0.15);
+    --bg-selected: rgba(255, 105, 0, 0.08);
+    --bg-elevated: #1A1A1A;
 
-    --text-primary: #fafaf5;
-    --text-secondary: #a8a29e;
-    --text-tertiary: #78716c;
-    --text-inverse: #1c1917;
+    --text-primary: #F0F0F0;
+    --text-secondary: #8A8A8A;
+    --text-tertiary: #555555;
+    --text-inverse: #0A0A0A;
 
     --border-color: rgba(255, 255, 255, 0.06);
-    --border-strong: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.12);
 
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 0 1px var(--te-orange), 0 0 24px rgba(255, 105, 0, 0.15);
+
+    --toolbar-bg: #141414;
+    --toolbar-border: rgba(255, 255, 255, 0.06);
+    --toolbar-btn-hover: #252525;
   }
 }
 
@@ -73,13 +93,14 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
   color: var(--text-primary);
   background-color: var(--bg-primary);
   overflow: hidden;
   height: 100dvh;
+  letter-spacing: -0.01em;
 }
 
 /* ===== App Layout ===== */
@@ -91,18 +112,35 @@ body {
 }
 
 .app-shell > .panel-wrapper {
-  overflow-y: auto;
   height: 100dvh;
+  overflow: hidden;
+}
+
+.app-shell > .panel-wrapper:nth-child(1),
+.app-shell > .panel-wrapper:nth-child(2) {
   display: flex;
   flex-direction: column;
 }
 
-.app-shell > .panel-wrapper > :global(*) {
+.app-shell > .panel-wrapper:nth-child(1) > :global(*),
+.app-shell > .panel-wrapper:nth-child(2) > :global(*) {
   flex: 1;
   overflow-y: auto;
 }
 
-/* Panel borders */
+/* Editor panel — needs special handling: panel itself is the flex container */
+.app-shell > .panel-wrapper:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell > .panel-wrapper:nth-child(3) > :global(*) {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Panel styling */
 .panel-sidebar {
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
@@ -119,7 +157,7 @@ body {
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -128,30 +166,32 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--text-tertiary);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
 }
 
-/* ===== Utility ===== */
+/* ===== Base Elements ===== */
 button {
-  font-family: inherit;
+  font-family: var(--font-mono);
   cursor: pointer;
   border: none;
   background: none;
   color: inherit;
   font-size: inherit;
+  letter-spacing: inherit;
 }
 
 input {
-  font-family: inherit;
+  font-family: var(--font-mono);
   font-size: inherit;
   color: inherit;
   background: none;
   border: none;
   outline: none;
+  letter-spacing: inherit;
 }
 
 .truncate {
@@ -165,28 +205,45 @@ input {
   outline: none;
   padding: 0;
   min-height: 300px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-primary);
+}
+
+.tiptap > *:first-child {
+  margin-top: 0;
 }
 
 .tiptap p {
-  margin: 0.5em 0;
+  margin: 0.6em 0;
 }
 
 .tiptap h1 {
-  font-size: 1.75em;
+  font-family: var(--font-display);
+  font-size: 1.8em;
   font-weight: 700;
-  margin: 1em 0 0.4em;
+  margin: 1.2em 0 0.4em;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
 }
 
 .tiptap h2 {
-  font-size: 1.4em;
+  font-family: var(--font-display);
+  font-size: 1.35em;
   font-weight: 600;
-  margin: 0.8em 0 0.3em;
+  margin: 1em 0 0.3em;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
 .tiptap h3 {
-  font-size: 1.15em;
+  font-family: var(--font-display);
+  font-size: 1.1em;
   font-weight: 600;
-  margin: 0.6em 0 0.25em;
+  margin: 0.8em 0 0.25em;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
 }
 
 .tiptap ul,
@@ -195,38 +252,50 @@ input {
   margin: 0.5em 0;
 }
 
+.tiptap li {
+  margin: 0.15em 0;
+}
+
+.tiptap li::marker {
+  color: var(--te-orange);
+}
+
 .tiptap blockquote {
-  border-left: 3px solid var(--accent);
+  border-left: 2px solid var(--te-orange);
   padding-left: 1em;
-  margin: 0.5em 0;
+  margin: 0.75em 0;
   color: var(--text-secondary);
+  font-style: italic;
 }
 
 .tiptap code {
   background: var(--bg-tertiary);
-  padding: 0.15em 0.35em;
+  padding: 0.15em 0.4em;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.9em;
+  color: var(--te-orange);
 }
 
 .tiptap pre {
   background: var(--bg-tertiary);
-  padding: 0.75em 1em;
+  padding: 1em 1.25em;
   border-radius: var(--radius-md);
   overflow-x: auto;
-  margin: 0.5em 0;
+  margin: 0.75em 0;
+  border: 1px solid var(--border-color);
 }
 
 .tiptap pre code {
   background: none;
   padding: 0;
+  color: var(--text-primary);
 }
 
 .tiptap hr {
   border: none;
-  border-top: 1px solid var(--border-color);
-  margin: 1.5em 0;
+  border-top: 1px solid var(--border-strong);
+  margin: 2em 0;
 }
 
 .tiptap p.is-editor-empty:first-child::before {
@@ -235,6 +304,20 @@ input {
   float: left;
   height: 0;
   pointer-events: none;
+  font-style: italic;
+}
+
+.tiptap strong {
+  font-weight: 600;
+}
+
+.tiptap em {
+  font-style: italic;
+}
+
+.tiptap s {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
 }
 
 /* ===== Mobile Responsive ===== */
@@ -255,18 +338,21 @@ input {
   .mobile-back-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 8px 12px;
-    font-size: 13px;
-    color: var(--accent);
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--te-orange);
     cursor: pointer;
     background: none;
     border: none;
-    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
   }
 
   .mobile-back-btn:hover {
-    color: var(--accent-hover);
+    color: var(--te-orange-hover);
   }
 }
 

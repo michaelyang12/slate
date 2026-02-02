@@ -8,6 +8,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
   const q = url.searchParams.get('q');
   if (!q) return json([]);
 
+  if (!db) return json([]);
   const rows = await db.execute({
     sql: `SELECT notes.*, snippet(notes_fts, 1, '<mark>', '</mark>', '...', 32) as snippet,
           rank
@@ -18,5 +19,15 @@ export const GET: RequestHandler = async ({ request, url }) => {
           LIMIT 20`,
     args: [q + '*'],
   });
-  return json(rows.rows);
+  return json(rows.rows.map((row: Record<string, unknown>) => ({
+    id: row.id,
+    folderId: row.folder_id,
+    title: row.title ?? '',
+    content: row.content ?? '',
+    plainText: row.plain_text ?? '',
+    sortOrder: row.sort_order ?? 0,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    snippet: row.snippet,
+  })));
 };
