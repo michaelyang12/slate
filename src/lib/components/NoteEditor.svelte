@@ -16,6 +16,7 @@
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     let currentNoteId: string | null = null;
     let wordCount = $state(0);
+    let editorVersion = $state(0);
 
     function stripHtml(html: string): string {
         return html
@@ -40,7 +41,6 @@
             updateNote(currentNoteId, { title, content, plainText });
         }, 500);
     }
-    //BUG: Cannot edit outside of title, if I edit this file (add console log, fcomment, etc), then save, and hot reload the page, then the 'start writing...' text appears and I can edit.
     function handleTitleInput(e: Event) {
         title = (e.target as HTMLInputElement).value;
         debouncedSave();
@@ -49,9 +49,7 @@
     function handleTitleKeydown(e: KeyboardEvent) {
         if (e.key === "Enter") {
             e.preventDefault();
-            console.log("Enter");
             editor?.commands.focus("start");
-            console.log("start");
         }
     }
 
@@ -94,11 +92,24 @@
     }
 
     function isActive(name: string, attrs?: Record<string, unknown>): boolean {
+        void editorVersion; // reactive dependency — re-evaluate on editor transactions
         return editor?.isActive(name, attrs) ?? false;
     }
 
-    onMount(() => {
-        editor = new Editor({
+    function destroyEditor() {
+        if (editor) {
+            editor.destroy();
+            editor = null;
+        }
+    }
+
+    function initEditor() {
+        if (!editorElement) return;
+
+        // Destroy stale editor if the DOM element was replaced (e.g. {#if} re-rendered)
+        destroyEditor();
+
+        const ed = new Editor({
             element: editorElement,
             extensions: [
                 StarterKit,
@@ -109,30 +120,42 @@
                 debouncedSave();
             },
             onTransaction: () => {
-                editor = editor;
+                editorVersion++;
             },
         });
 
-        const unsub = selectedNote.subscribe((note) => {
-            if (!editor) return;
+        editor = ed;
+    }
 
-            if (note && note.id !== currentNoteId) {
-                currentNoteId = note.id;
-                title = note.title;
-                editor.commands.setContent(note.content || "");
-                wordCount = countWords(note.plainText || "");
-            } else if (!note) {
-                currentNoteId = null;
-                title = "";
-                editor.commands.setContent("");
-                wordCount = 0;
+    onMount(() => {
+        const unsub = selectedNote.subscribe((note) => {
+            if (note) {
+                // Defer to next tick so the {#if} block renders the DOM first
+                requestAnimationFrame(() => {
+                    if (!editor || !editorElement?.contains(editor.options.element)) {
+                        initEditor();
+                    }
+                    if (editor && note.id !== currentNoteId) {
+                        currentNoteId = note.id;
+                        title = note.title;
+                        editor.commands.setContent(note.content);
+                        wordCount = countWords(note.plainText || "");
+                    }
+                });
+                return;
             }
+
+            // Note deselected — clean up
+            destroyEditor();
+            currentNoteId = null;
+            title = "";
+            wordCount = 0;
         });
 
         return () => {
             unsub();
             if (debounceTimer) clearTimeout(debounceTimer);
-            if (editor) editor.destroy();
+            destroyEditor();
         };
     });
 </script>

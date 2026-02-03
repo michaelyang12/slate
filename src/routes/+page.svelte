@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { fullSync } from '$lib/sync';
-  import { loadFolders, selectedFolderId } from '$lib/stores/folders';
-  import { createNote, selectedNoteId, selectedNote } from '$lib/stores/notes';
+  import { loadFolders, folders, selectedFolderId } from '$lib/stores/folders';
+  import { createNote, loadNotes, selectedNoteId, selectedNote } from '$lib/stores/notes';
   import { searchOpen, mobileView } from '$lib/stores/ui';
+  import type { Folder } from '$lib/types';
   import FolderSidebar from '$lib/components/FolderSidebar.svelte';
   import NoteList from '$lib/components/NoteList.svelte';
   import NoteEditor from '$lib/components/NoteEditor.svelte';
@@ -12,11 +13,34 @@
   let innerWidth = $state(typeof window !== 'undefined' ? window.innerWidth : 1024);
   let isMobile = $derived(innerWidth < 768);
 
-  onMount(() => {
+  async function initApp() {
+    // Load local data first so the UI renders immediately
+    await loadFolders();
+
+    let allFolders: Folder[] = [];
+    const unsub = folders.subscribe((v) => (allFolders = v));
+    unsub();
+
+    if (allFolders.length > 0) {
+      let currentId: string | null = null;
+      const unsub2 = selectedFolderId.subscribe((v) => (currentId = v));
+      unsub2();
+      if (!currentId) {
+        selectedFolderId.set(allFolders[0].id);
+        loadNotes(allFolders[0].id);
+        if (isMobile) mobileView.set('notes');
+      }
+    }
+
+    // Sync in the background, then refresh local data
     fullSync().then(() => loadFolders());
+  }
+
+  onMount(() => {
+    initApp();
 
     function handleOnline() {
-      fullSync();
+      fullSync().then(() => loadFolders());
     }
 
     window.addEventListener('online', handleOnline);

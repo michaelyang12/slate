@@ -91,9 +91,11 @@
             e.preventDefault();
             selectedIndex = Math.max(selectedIndex - 1, 0);
         } else if (e.key === "Enter") {
-            // e.preventDefault();
+            e.preventDefault();
             if (results[selectedIndex]) {
                 openResult(results[selectedIndex]);
+            } else {
+                searchOpen.set(false);
             }
         } else if (e.key === "Escape") {
             e.preventDefault();

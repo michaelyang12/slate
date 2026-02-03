@@ -326,13 +326,18 @@ input {
     display: block;
   }
 
-  .app-shell > .panel-wrapper {
+  .app-shell > .panel-wrapper,
+  .app-shell > .panel-wrapper:nth-child(1),
+  .app-shell > .panel-wrapper:nth-child(2),
+  .app-shell > .panel-wrapper:nth-child(3) {
     display: none;
     width: 100%;
+    height: 100dvh;
   }
 
   .app-shell > .panel-wrapper.mobile-visible {
     display: flex;
+    flex-direction: column;
   }
 
   .mobile-back-btn {

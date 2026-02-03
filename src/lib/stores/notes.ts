@@ -38,6 +38,7 @@ export async function updateNote(id: string, updates: Partial<Note>) {
   await localDb.notes.put(updated);
   await queueSync('note', 'update', id, updated as unknown as Record<string, unknown>);
   selectedNote.set(updated);
+  await loadNotes(updated.folderId);
 }
 
 export async function deleteNote(id: string, folderId: string) {
