@@ -1,5 +1,6 @@
 import { localDb } from './db';
 import type { Folder, Note } from './types';
+import { syncMode } from './stores/ui';
 import { v4 as uuid } from 'uuid';
 
 const API_BASE = '/api';
@@ -18,6 +19,13 @@ function setLastSyncTime(time: string) {
 
 export async function pullFromRemote() {
   try {
+    const statusRes = await fetch(`${API_BASE}/status`);
+    if (statusRes.ok) {
+      const { dbConfigured } = await statusRes.json();
+      syncMode.set(dbConfigured ? 'connected' : 'local-only');
+      if (!dbConfigured) return;
+    }
+
     const since = getLastSyncTime();
     const params = since ? `?since=${encodeURIComponent(since)}` : '';
 

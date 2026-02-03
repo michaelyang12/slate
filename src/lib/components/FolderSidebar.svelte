@@ -1,7 +1,7 @@
 <script lang="ts">
   import { folders, selectedFolderId, createFolder, updateFolder, deleteFolder } from '$lib/stores/folders';
   import { loadNotes, notes, selectedNoteId, selectedNote } from '$lib/stores/notes';
-  import { mobileView } from '$lib/stores/ui';
+  import { mobileView, syncMode } from '$lib/stores/ui';
   import type { Folder } from '$lib/types';
 
   let newFolderName = $state('');
@@ -138,6 +138,13 @@
       <button class="ctx-danger" onclick={() => { if (contextMenu) handleDelete(contextMenu.folderId); }}>
         <span class="ctx-icon">✕</span> Delete
       </button>
+    </div>
+  {/if}
+
+  {#if $syncMode === 'local-only'}
+    <div class="sync-banner">
+      <span class="sync-dot"></span>
+      <span>Local only — configure .env for sync</span>
     </div>
   {/if}
 
@@ -411,6 +418,25 @@
   .ctx-icon {
     font-size: 11px;
     opacity: 0.5;
+  }
+
+  .sync-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    border-top: 1px solid var(--border-color);
+    letter-spacing: 0.02em;
+  }
+
+  .sync-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+    flex-shrink: 0;
   }
 
   .sidebar-footer {
