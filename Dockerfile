@@ -1,30 +1,38 @@
-# ---- base ----
-FROM oven/bun:1.0 AS base
+# ---- Builder ----
+FROM oven/bun:1 AS builder
 WORKDIR /app
 
-# ---- install deps ----
-FROM base AS deps
-COPY bun.lockb package.json ./
+ARG TURSO_URL
+ARG TURSO_AUTH_TOKEN
+ARG API_KEY
+
+# Make them available to Bun
+ENV TURSO_URL=$TURSO_URL
+ENV TURSO_AUTH_TOKEN=$TURSO_AUTH_TOKEN
+ENV API_KEY=$API_KEY
+
+# Copy only lockfile and package.json first (for caching)
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-# ---- build ----
-FROM deps AS build
+# Copy the rest of the source and build
 COPY . .
 RUN bun run build
 
-# ---- runtime ----
-FROM oven/bun:1.0-slim AS runner
+# ---- Runtime ----
+FROM oven/bun:1-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-# copy built output
-COPY --from=build /app/build ./build
-COPY --from=build /app/package.json ./
+# Copy build output and dependencies
+COPY --from=builder /app/.svelte-kit ./svelte-kit
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
 
-# install only prod deps
-RUN bun install --production
-
+# Expose the port your Svelte/Bun server runs on
 EXPOSE 3000
 
+# Start the app
 CMD ["bun", "run", "build/index.js"]
